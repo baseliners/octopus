@@ -29,8 +29,10 @@ class Octopus::Proxy
     end
 
     shards_config ||= []
-
+    
     shards_config.each do |key, value|
+      value = value.stringify_keys
+      
       if value.has_key?("adapter")
         initialize_adapter(value['adapter'])
         @shards[key.to_sym] = connection_pool_for(value, "#{value['adapter']}_connection")
