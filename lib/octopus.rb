@@ -1,4 +1,10 @@
-require 'active_support/core_ext/class/inheritable_attributes'
+require 'active_support/version'
+if ActiveSupport::VERSION::MAJOR == 3 && ActiveSupport::VERSION::MINOR > 1
+  require 'active_support/core_ext/class/attribute'
+else
+  require 'active_support/core_ext/class/inheritable_attributes'
+end
+
 require "yaml"
 require "erb"
 
@@ -90,6 +96,8 @@ if Octopus.rails3?
   require "octopus/rails3/association"
   require "octopus/rails3/persistence"
   require "octopus/rails3/arel"
+  require "octopus/rails3/log_subscriber"
+  require "octopus/rails3/abstract_adapter"
 else
   require "octopus/rails2/association"
   require "octopus/rails2/persistence"
