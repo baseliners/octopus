@@ -29,10 +29,10 @@ class Octopus::Proxy
     end
 
     shards_config ||= []
-    
+
     shards_config.each do |key, value|
       value = value.stringify_keys
-      
+
       if value.has_key?("adapter")
         initialize_adapter(value['adapter'])
         @shards[key.to_sym] = connection_pool_for(value, "#{value['adapter']}_connection")
@@ -142,7 +142,7 @@ class Octopus::Proxy
   end
 
   def transaction(options = {}, &block)
-    if @replicated && (current_model.read_inheritable_attribute(:replicated) || @fully_replicated)
+    if @replicated && (current_model.replicated? || @fully_replicated)
       self.run_queries_on_shard(:master) do
         select_connection.transaction(options, &block)
       end
@@ -198,7 +198,7 @@ class Octopus::Proxy
     old_shard = self.current_shard
 
     begin
-      if current_model.read_inheritable_attribute(:replicated) || @fully_replicated
+      if current_model.replicated? || @fully_replicated
         self.current_shard = @slaves_list[@slave_index = (@slave_index + 1) % @slaves_list.length]
       else
         self.current_shard = :master
