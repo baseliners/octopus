@@ -48,7 +48,7 @@ namespace :db do
   desc 'Create tables on tests databases'
   task :create_tables do
     Dir.chdir(File.expand_path(File.dirname(__FILE__) + "/spec"))
-    require 'active_support/core_ext/class/inheritable_attributes'
+    require 'active_support/core_ext/class/attribute'
     require 'active_record'
     require "support/database_connection"
     require "octopus"
