@@ -65,7 +65,11 @@ module Octopus
   def self.shards=(shards)
     @config ||= HashWithIndifferentAccess.new
     @config[rails_env()] = HashWithIndifferentAccess.new(shards)
-    ActiveRecord::Base.connection.initialize_shards(@config)
+    conn = ActiveRecord::Base.connection
+
+    if conn.is_a?(Octopus::Proxy)
+      conn.initialize_shards(@config)
+    end
   end
 
   def self.using(shard, &block)
