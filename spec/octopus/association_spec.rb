@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "spec_helper"
 
 describe Octopus::Association do
   describe "when you have a 1 x 1 relationship" do
@@ -653,5 +653,12 @@ describe Octopus::Association do
         @brazil_client.comments.empty?.should be_true
       end
     end
+  end
+
+  it "block" do
+    @brazil_role = Role.using(:brazil).create!(:name => "Brazil Role")
+    @brazil_role.permissions.build{|o|o.name = "ok"}.name.should == "ok"
+    @brazil_role.permissions.create{|o|o.name = "ok"}.name.should == "ok"
+    @brazil_role.permissions.create!{|o|o.name = "ok"}.name.should == "ok"
   end
 end

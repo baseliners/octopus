@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "spec_helper"
 
 describe Octopus::Model do
   describe "#using method" do
@@ -203,7 +203,7 @@ describe Octopus::Model do
 
   describe "AR basic methods" do
     it "octopus_establish_connection" do
-      CustomConnection.connection.current_database.should == "octopus_shard2"
+      CustomConnection.connection.current_database.should == "octopus_shard_2"
     end
 
     it "increment" do
@@ -414,8 +414,8 @@ describe Octopus::Model do
 
     it "should mark the Cat model as replicated" do
       using_environment :production_replicated do
-        User.replicated?.should be_false
-        Cat.replicated?.should be_true
+        User.replicated.should be_false
+        Cat.replicated.should be_true
       end
     end
   end
