@@ -81,13 +81,11 @@ module Octopus
   end
 
   def self.shards=(shards)
-    config[rails_env()] = HashWithIndifferentAccess.new(shards)
-    conn = ActiveRecord::Base.connection
-
-    if conn.is_a?(Octopus::Proxy)
-      conn.initialize_shards(config)
+    Octopus.environments.each do |environment| #initialize config with shards for each environment specified by user; need to ensure that user specifies environments prior to setting config.shards during dynamic shards initialization
+      config[environment] = HashWithIndifferentAccess.new(shards)
     end
-  end
+    ActiveRecord::Base.connection.initialize_shards(config)
+end
 
   def self.using(shard, &block)
     conn = ActiveRecord::Base.connection
